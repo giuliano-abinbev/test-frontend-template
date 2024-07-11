@@ -1,0 +1,38 @@
+name: Continous Integration
+
+on:
+    pull_request:
+      types: [opened, synchronize, reopened, closed]
+      branches:
+        - main
+      paths-ignore:
+        - '.github/**'
+    push:
+      branches:
+        - main
+      paths-ignore:
+        - '.github/**'
+
+jobs:
+    Linting:
+        name: Linting
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+            with:
+              ref: ${{ github.ref }}
+          - name: Setup Node.js
+            uses: actions/setup-node@v3
+          - name: Authenticate to NPM JFrog Registry
+            run: |
+              echo "@abi-labs-hexa:registry=https://abinbev.jfrog.io/artifactory/api/npm/abi-labs-hexa/" >> .npmrc && \
+              echo "//abinbev.jfrog.io/artifactory/api/npm/abi-labs-hexa/:_authToken=${{ secrets.JFROG_SVC_API_KEY }}" >> .npmrc && \
+              echo "@abi-labs-frontend:registry=https://abinbev.jfrog.io/artifactory/api/npm/abi-labs-frontend/" >> .npmrc && \
+              echo "//abinbev.jfrog.io/artifactory/api/npm/abi-labs-frontend/:_authToken=${{ secrets.JFROG_SVC_API_KEY }}" >> .npmrc
+          - name: Install Modules
+            run: |
+              npm install
+          - name: Start linting
+            run: npm run lint
+          - name: Typecheck
+            run: npm run check-types

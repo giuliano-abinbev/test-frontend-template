@@ -1,0 +1,12 @@
+.header {
+  position: sticky;
+  top: 0;
+  background-color: var(--hexa-color-primitive-solid-neutral-0);
+  box-shadow: var(--hexa-shadow-elevation-4);
+  padding: var(--hexa-measure-space-2);
+  z-index: 9;
+}
+
+.logo {
+  display: block;
+}

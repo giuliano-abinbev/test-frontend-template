@@ -1,0 +1,30 @@
+name: Sonarcloud Scan
+
+on:
+  pull_request:
+    branches:
+      - main 
+  push:
+    branches:
+    - main
+
+jobs:
+  SonarScan:
+    uses: ab-inbev-labs/github-workflows/.github/workflows/sonarcloud-scan.yml@v1.40.0
+    with:
+      repocheckout: ${{ github.repository }}  
+      
+      #use these for publishing coverage report
+      #downloadArtifactName: artifactname
+      #unzipArtifactpath: artifcatpath
+      
+      #sonarcloud
+      scanSonarCloud: true
+      sonarorg: ab-inbev-beertech
+      sonarprojectkey: ab-inbev-beertech_freight-factor-web
+      sonarBreakBuild: true
+      #use this parameters for codecoverage report
+      #codeCoverageReportType:sonar.javascript.lcov.reportPaths
+      #codeCoverageReportpath: reportpath
+    secrets:
+      sonartoken: ${{ secrets.SONAR_TOKEN }}
